@@ -120,6 +120,36 @@
 					<goals>deploy</goals>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.jboss.as.plugins</groupId>
+				<artifactId>jboss-as-maven-plugin</artifactId>
+				<version>7.6.Final</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<configuration>
+							<target>
+								<copy file="${basedir}/src/main/webapp/WEB-INF/web.xml"
+									todir="${project.build.directory}" />
+								<java fork="true"
+									classname="br.com.caelum.vraptor.scan.VRaptorStaticScanning"
+									classpathref="maven.compile.classpath">
+									<arg value="${project.build.directory}/web.xml" />
+									<classpath refid="maven.compile.classpath" />
+									<classpath path="${project.build.outputDirectory}" />
+								</java>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>
